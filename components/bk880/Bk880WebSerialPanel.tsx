@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 import {
@@ -36,7 +36,6 @@ const INITIAL_CONFIGURATION: BK880Configuration = {
 export function Bk880WebSerialPanel() {
   const transportRef = useRef<WebSerialPort | null>(null);
   const [configuration, setConfiguration] = useState<BK880Configuration>(INITIAL_CONFIGURATION);
-  const [isSupported] = useState(() => WebSerialPort.isSupported());
   const [isConnected, setIsConnected] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
   const [connectionStatus, setConnectionStatus] = useState("尚未連線");
@@ -81,6 +80,12 @@ export function Bk880WebSerialPanel() {
   const connect = async (): Promise<void> => {
     const transport = transportRef.current;
     if (transport === null) {
+      return;
+    }
+
+    if (!WebSerialPort.isSupported()) {
+      setError("目前瀏覽器不支援 Web Serial API。請改用最新版 Chrome 或 Microsoft Edge，並從 localhost 或 HTTPS 網站開啟本頁。");
+      setConnectionStatus("瀏覽器不支援 Web Serial");
       return;
     }
 
@@ -172,12 +177,6 @@ export function Bk880WebSerialPanel() {
           </span>
         </header>
 
-        {!isSupported && (
-          <div className="rounded-2xl border border-amber-200 bg-amber-50/90 p-4 text-sm leading-7 text-amber-800" role="alert">
-            此瀏覽器沒有 Web Serial API。請改用最新版 Chrome 或 Microsoft Edge，並從 localhost 或 HTTPS 網站開啟本頁。
-          </div>
-        )}
-
         <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
           <section className="rounded-3xl border border-white bg-white/70 p-5 shadow-sm" aria-labelledby="bk880-connection-title">
             <p className="text-[10px] font-black tracking-[0.18em] text-slate-400">01 · CONNECTION</p>
@@ -187,7 +186,7 @@ export function Bk880WebSerialPanel() {
                 type="button"
                 className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white shadow-lg shadow-slate-300 transition hover:-translate-y-0.5 hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
                 onClick={() => void connect()}
-                disabled={!isSupported || isBusy || isConnected}
+                disabled={isBusy || isConnected}
               >
                 選擇並連線 BK880
               </button>
@@ -352,6 +351,7 @@ function formatFrequency(value: number): string {
 function toMessage(caught: unknown): string {
   return caught instanceof Error ? caught.message : String(caught);
 }
+
 
 
 
