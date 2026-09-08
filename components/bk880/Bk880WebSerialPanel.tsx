@@ -216,7 +216,7 @@ export function Bk880WebSerialPanel() {
             <p className="text-[10px] font-black tracking-[0.18em] text-slate-400">02 · CONFIGURATION · LABVIEW MODE</p>
             <h2 id="bk880-setting-title" className="mt-2 text-xl font-black text-slate-800">量測設定</h2>
             <p className="mt-3 text-sm leading-7 text-slate-500">
-              頻率會直接寫入但不讀回查詢；Tolerance 狀態沿用儀器面板，本頁只寫入 Tolerance Range。
+              為避免儀器回報 E10，頻率暫時沿用 BK880 面板設定，不由 Web 寫入；Tolerance 狀態沿用儀器面板，本頁只寫入 Tolerance Range。
             </p>
 
             <fieldset className="mt-5" disabled={!isConnected || isBusy}>
@@ -229,7 +229,7 @@ export function Bk880WebSerialPanel() {
                   options={SECONDARY_PARAMETERS.map((value) => ({ value, label: value }))}
                 />
                 <SelectBox
-                  label="頻率"
+                  label="面板頻率備註"
                   value={String(configuration.frequency)}
                   onChange={(value) => setConfiguration((current) => ({ ...current, frequency: Number(value) as BK880Configuration["frequency"] }))}
                   options={FREQUENCIES.map((value) => ({ value: String(value), label: formatFrequency(value) }))}
@@ -352,5 +352,7 @@ function formatFrequency(value: number): string {
 function toMessage(caught: unknown): string {
   return caught instanceof Error ? caught.message : String(caught);
 }
+
+
 
 

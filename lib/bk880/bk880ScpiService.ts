@@ -71,7 +71,7 @@ export function parseFetchResponse(
  *
  * 現場測試已知 `FUNCTION:IMPA?`、`FUNCTION:IMPB?`、`FREQUENCY?` 等設定回讀
  * 可能沒有回覆。因此此類別刻意不將設定查詢作為阻擋條件，而是忠實移植
- * bk880_ui_v3.py 的 LF、100 ms 等待與雙 FETCH? 流程；本版額外支援只寫入頻率、不讀回。
+ * bk880_ui_v3.py 的 LF、100 ms 等待與雙 FETCH? 流程；為避免儀器 E10，頻率沿用面板設定不由 Web 寫入。
  */
 export class BK880ScpiService {
   private readonly transport: ScpiTransport;
@@ -86,27 +86,24 @@ export class BK880ScpiService {
   }
 
   /**
-   * 以 LabVIEW 相容節奏套用主／次參數、頻率與 Tolerance Range。
+   * 以 LabVIEW 相容節奏套用主／次參數與 Tolerance Range。
    *
-   * frequency 會以 `FREQUENCY <Hz>` 直接寫入，卻刻意不發出 `FREQUENCY?` 讀回；
-   * toleranceEnabled 仍僅保留 UI 相容性，Tolerance State 沿用儀器面板狀態。
-   * 這樣可設定頻率，同時避開已知會逾時的設定回讀查詢。
+   * frequency 參數只保留給 UI 顯示與未來擴充；本版不送出 `FREQUENCY <Hz>`，
+   * 因實機回報該命令可能讓儀器出現 E10 未知命令。Tolerance State 也沿用儀器面板狀態。
    */
   public async configure(configuration: BK880Configuration): Promise<AppliedSettings> {
-    const { primary, secondary, frequency, toleranceRange } = configuration;
+    const { primary, secondary, toleranceRange } = configuration;
     await this.transport.writeLine(`FUNCTION:IMPA ${primary}`);
     await waitForInstrument();
     await this.transport.writeLine(`FUNCTION:IMPB ${secondary}`);
     await waitForInstrument();
-    // 寫入本次 UI 選擇的頻率，但不查詢 FREQUENCY?，避免已知的回讀逾時。
-    await this.transport.writeLine(`FREQUENCY ${frequency}`);
-    await waitForInstrument();
+    // 頻率沿用儀器面板設定；此處刻意不送 FREQUENCY，避免 LCR-615 回報 E10 未知命令。
     await this.transport.writeLine(`CALCULATE:TOLERANCE:RANGE ${toleranceRange}`);
 
     return {
       primary,
       secondary,
-      frequency: `已送出 ${frequency} Hz（未讀回驗證）`,
+      frequency: "LabVIEW 相容：沿用面板頻率（未由 Web 寫入）",
       toleranceState: "LabVIEW 相容：沿用面板狀態，僅寫入 Range",
       toleranceRange: `${toleranceRange}%`,
     };
@@ -144,3 +141,4 @@ export class BK880ScpiService {
     return { settings, reading };
   }
 }
+
