@@ -65,8 +65,8 @@ export default function Home() {
             <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" /> MEASUREMENT, REFINED
           </p>
           <h1 className="max-w-3xl text-5xl font-black leading-[1.02] tracking-[-0.06em] text-slate-900 sm:text-6xl lg:text-7xl">
-            量測，
-            <span className="bg-gradient-to-r from-sky-500 via-indigo-600 to-violet-600 bg-clip-text text-transparent">剛剛好地精準。</span>
+            AI時代需要
+            <span className="bg-gradient-to-r from-sky-500 via-indigo-600 to-violet-600 bg-clip-text text-transparent">精準的量測</span>
           </h1>
           <p className="mt-7 max-w-xl text-base leading-8 text-slate-500 sm:text-lg">
             Meter Intro 以清晰的操作體驗與穩定的量測表現，陪伴工程師完成每一次驗證、分析與決策。
@@ -154,3 +154,4 @@ export default function Home() {
     </main>
   );
 }
+
