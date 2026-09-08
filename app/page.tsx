@@ -53,6 +53,7 @@ export default function Home() {
           </a>
           <nav className="hidden items-center gap-7 text-xs font-bold text-slate-500 md:flex">
             <a className="transition hover:text-indigo-600" href="#products">產品</a>
+            <a className="transition hover:text-indigo-600" href="/bk880">BK880 WebSerial</a>
             <a className="transition hover:text-indigo-600" href="#capability">特色</a>
             <a className="rounded-xl bg-slate-900 px-4 py-2.5 text-white shadow-lg shadow-slate-300 transition hover:bg-indigo-600" href="#contact">聯絡我們</a>
           </nav>
@@ -154,4 +155,5 @@ export default function Home() {
     </main>
   );
 }
+
 
