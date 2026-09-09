@@ -1,4 +1,6 @@
-﻿const products = [
+﻿import Link from "next/link";
+
+const products = [
   {
     code: "01",
     title: "數位萬用電錶",
@@ -42,6 +44,44 @@ export default function Home() {
         <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-cyan-200/45 blur-3xl" />
       </div>
 
+      <aside
+        className="fixed right-5 top-1/2 z-20 hidden -translate-y-1/2 xl:block"
+        aria-label="設備與頁面快速切換"
+      >
+        <div className="w-[8.5rem] rounded-[1.5rem] border border-white/80 bg-white/55 p-2.5 shadow-[0_24px_70px_rgba(71,85,105,0.16)] backdrop-blur-2xl">
+          <p className="px-2 pb-2 pt-1 text-[9px] font-black uppercase tracking-[0.22em] text-slate-400">
+            Quick Nav
+          </p>
+          <nav className="flex flex-col gap-2 text-xs font-black">
+            <Link
+              className="flex items-center justify-between gap-2 rounded-2xl bg-slate-900 px-3 py-3 text-white shadow-lg shadow-slate-300 transition hover:-translate-y-0.5 hover:bg-indigo-600"
+              href="/bk880"
+            >
+              <span className="whitespace-nowrap">BK880</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+            <a
+              className="whitespace-nowrap rounded-2xl border border-white/75 bg-white/70 px-3 py-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-indigo-600"
+              href="#products"
+            >
+              產品總覽
+            </a>
+            <a
+              className="whitespace-nowrap rounded-2xl border border-white/75 bg-white/70 px-3 py-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-indigo-600"
+              href="#capability"
+            >
+              功能特色
+            </a>
+            <a
+              className="whitespace-nowrap rounded-2xl border border-white/75 bg-white/70 px-3 py-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-indigo-600"
+              href="#contact"
+            >
+              聯絡我們
+            </a>
+          </nav>
+        </div>
+      </aside>
+
       <header className="relative z-10 mx-auto max-w-7xl px-5 pt-5 sm:px-8">
         <div className="flex items-center justify-between rounded-2xl border border-white/75 bg-white/65 px-5 py-3 shadow-[0_12px_40px_rgba(71,85,105,0.10)] backdrop-blur-xl">
           <a className="flex items-center gap-3" href="#top" aria-label="Meter Intro 首頁">
@@ -53,7 +93,7 @@ export default function Home() {
           </a>
           <nav className="hidden items-center gap-7 text-xs font-bold text-slate-500 md:flex">
             <a className="transition hover:text-indigo-600" href="#products">產品</a>
-            <a className="transition hover:text-indigo-600" href="/bk880">BK880 WebSerial</a>
+            <Link className="transition hover:text-indigo-600" href="/bk880">BK880 WebSerial</Link>
             <a className="transition hover:text-indigo-600" href="#capability">特色</a>
             <a className="rounded-xl bg-slate-900 px-4 py-2.5 text-white shadow-lg shadow-slate-300 transition hover:bg-indigo-600" href="#contact">聯絡我們</a>
           </nav>
@@ -78,7 +118,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="relative mx-auto w-full max-w-lg rounded-[2rem] border border-white/80 bg-white/55 p-4 shadow-[0_30px_80px_rgba(71,85,105,0.18)] backdrop-blur-2xl">
+        <div className="relative mx-auto w-full max-w-md rounded-[2rem] border border-white/80 bg-white/55 p-4 shadow-[0_30px_80px_rgba(71,85,105,0.18)] backdrop-blur-2xl xl:-translate-x-8">
           <div className="rounded-[1.5rem] border border-white bg-gradient-to-br from-white/90 via-slate-50/80 to-sky-100/70 p-6">
             <div className="flex items-center justify-between text-[10px] font-bold tracking-[0.16em] text-slate-400">
               <span>LIVE MEASUREMENT</span>
@@ -155,5 +195,6 @@ export default function Home() {
     </main>
   );
 }
+
 
 
