@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import {
   DEFAULT_SECONDARY,
@@ -163,7 +164,7 @@ export function Bk880WebSerialPanel() {
       <div className="pointer-events-none absolute -bottom-24 left-10 h-72 w-72 rounded-full bg-violet-200/60 blur-3xl" aria-hidden="true" />
 
       <div className="relative z-10 grid gap-6">
-        <header className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <header className="grid gap-6 lg:grid-cols-[1fr_420px] lg:items-start">
           <div>
             <p className="text-xs font-black tracking-[0.2em] text-indigo-500">BK PRECISION 880 · WEB SERIAL API</p>
             <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-900 sm:text-5xl">BK880 瀏覽器量測介面</h1>
@@ -172,9 +173,16 @@ export function Bk880WebSerialPanel() {
               請先關閉 Python、LabVIEW 或其他正在占用同一個 COM 埠的程式。
             </p>
           </div>
-          <span className={`w-fit rounded-full px-4 py-2 text-xs font-black ${isConnected ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
-            {isConnected ? "● 已連線" : "○ 未連線"}
-          </span>
+
+          <div className="grid gap-3">
+            <span className={`w-fit justify-self-end rounded-full px-4 py-2 text-xs font-black ${isConnected ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"}`}>
+              {isConnected ? "● 已連線" : "○ 未連線"}
+            </span>
+            <div className="grid grid-cols-2 gap-3">
+              <InstrumentImageCard src="/instruments/BK880.webp" alt="BK Precision BK880 LCR Meter" label="BK880" />
+              <InstrumentImageCard src="/instruments/LCR-615.webp" alt="Tecpel LCR-615 Handheld LCR Meter" label="LCR-615" />
+            </div>
+          </div>
         </header>
 
         <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
@@ -295,6 +303,31 @@ export function Bk880WebSerialPanel() {
         </footer>
       </div>
     </section>
+  );
+}
+
+
+interface InstrumentImageCardProps {
+  src: string;
+  alt: string;
+  label: string;
+}
+
+/** 頁首右側的儀器圖片卡片，用來讓操作者快速辨識 BK880 / LCR-615 實體外觀。 */
+function InstrumentImageCard({ src, alt, label }: InstrumentImageCardProps) {
+  return (
+    <figure className="group rounded-3xl border border-white/80 bg-white/70 p-3 text-center shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:bg-white/85 hover:shadow-xl">
+      <div className="flex h-40 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-sky-50 sm:h-48">
+        <Image
+          src={src}
+          alt={alt}
+          width={197}
+          height={309}
+          className="h-full w-full object-contain p-2 drop-shadow-[0_18px_18px_rgba(15,23,42,0.18)] transition duration-300 group-hover:scale-105"
+        />
+      </div>
+      <figcaption className="mt-3 text-[10px] font-black tracking-[0.18em] text-slate-500">{label}</figcaption>
+    </figure>
   );
 }
 
