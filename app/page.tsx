@@ -1,4 +1,5 @@
 ﻿import Link from "next/link";
+import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 
 const products = [
   {
@@ -189,6 +190,7 @@ export default function Home() {
         <div>
           <p className="text-base font-black tracking-[0.15em] text-slate-800">METER INTRO</p>
           <p className="mt-1 text-xs text-slate-400">Precision instruments, thoughtfully made.</p>
+          <PageViewTracker path="/" label="首頁瀏覽" className="mt-3" />
         </div>
         <a className="w-fit rounded-xl border border-white bg-white/65 px-5 py-3 text-sm font-bold text-indigo-600 shadow-sm backdrop-blur transition hover:bg-white" href="mailto:contact@meter-intro.example">CONTACT@METER-INTRO.EXAMPLE</a>
       </footer>
