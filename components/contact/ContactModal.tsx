@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 type ContactModalProps = {
   className: string;
@@ -130,21 +131,22 @@ export function ContactModal({ className, label = "聯絡我們" }: ContactModal
         {label}
       </button>
 
-      {isOpen ? (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              closeModal();
-            }
-          }}
-        >
-          <section
-            className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-[2rem] border border-white/80 bg-[#f8fbff] p-6 shadow-2xl shadow-slate-900/30 sm:p-8"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="contact-modal-title"
-          >
+      {isOpen
+        ? createPortal(
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4 backdrop-blur-sm"
+              onMouseDown={(event) => {
+                if (event.target === event.currentTarget) {
+                  closeModal();
+                }
+              }}
+            >
+              <section
+                className="max-h-[calc(100vh-2rem)] w-full max-w-lg overflow-y-auto rounded-[2rem] border border-white/80 bg-[#f8fbff] p-6 shadow-2xl shadow-slate-900/30 sm:p-8"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="contact-modal-title"
+              >
             <div className="flex items-start justify-between gap-6">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-indigo-500">Contact</p>
@@ -239,9 +241,11 @@ export function ContactModal({ className, label = "聯絡我們" }: ContactModal
                 {statusMessage}
               </p>
             ) : null}
-          </section>
-        </div>
-      ) : null}
+              </section>
+            </div>,
+            document.body,
+          )
+        : null}
     </>
   );
 }
