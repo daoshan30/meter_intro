@@ -35,6 +35,34 @@ export default function BK880Page() {
 
       <div className="relative z-10 mx-auto max-w-7xl">
         <Bk880WebSerialPanel />
+
+        <section
+          className="mt-8 rounded-[2rem] border border-white/80 bg-white/65 p-6 shadow-[0_18px_50px_rgba(71,85,105,0.12)] backdrop-blur-xl sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-8"
+          aria-labelledby="lcr615-affiliate-title"
+        >
+          <div className="max-w-2xl">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-indigo-500">
+              LCR-615 購買資訊
+            </p>
+            <h2 id="lcr615-affiliate-title" className="mt-2 text-xl font-black text-slate-900">
+              正在尋找 LCR-615 量測儀器？
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-slate-500">
+              可前往蝦皮查看目前商品價格、庫存與購買資訊。
+            </p>
+          </div>
+          <a
+            className="mt-5 inline-flex w-full shrink-0 items-center justify-center rounded-2xl bg-[#ee4d2d] px-5 py-3 text-sm font-black text-white shadow-lg shadow-orange-200 transition hover:-translate-y-0.5 hover:bg-[#d94225] sm:mt-0 sm:w-auto"
+            href="https://s.shopee.tw/9Ki2tIcyV1"
+            target="_blank"
+            rel="noopener sponsored"
+          >
+            前往蝦皮查看 LCR-615
+          </a>
+          <p className="mt-5 text-xs leading-6 text-slate-400 sm:basis-full">
+            ※ 此為蝦皮聯盟連結。透過此連結購買，您支付的價格不變，本站可能獲得分潤；商品價格、庫存與售後服務以蝦皮頁面為準。
+          </p>
+        </section>
       </div>
     </main>
   );
