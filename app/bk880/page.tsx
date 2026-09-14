@@ -34,10 +34,8 @@ export default function BK880Page() {
       </header>
 
       <div className="relative z-10 mx-auto max-w-7xl">
-        <Bk880WebSerialPanel />
-
         <section
-          className="mt-8 rounded-[2rem] border border-white/80 bg-white/65 p-6 shadow-[0_18px_50px_rgba(71,85,105,0.12)] backdrop-blur-xl sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-8"
+          className="mb-8 rounded-[2rem] border border-white/80 bg-white/65 p-6 shadow-[0_18px_50px_rgba(71,85,105,0.12)] backdrop-blur-xl sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-8"
           aria-labelledby="lcr615-affiliate-title"
         >
           <div className="max-w-2xl">
@@ -63,6 +61,8 @@ export default function BK880Page() {
             ※ 此為蝦皮聯盟連結。透過此連結購買，您支付的價格不變，本站可能獲得分潤；商品價格、庫存與售後服務以蝦皮頁面為準。
           </p>
         </section>
+
+        <Bk880WebSerialPanel />
       </div>
     </main>
   );
