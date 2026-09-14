@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 type ContactModalProps = {
   className: string;
@@ -29,6 +29,17 @@ export function ContactModal({ className, label = "聯絡我們" }: ContactModal
   const [honeypot, setHoneypot] = useState("");
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [statusMessage, setStatusMessage] = useState("");
+  // 此計時器僅在瀏覽器端 Client Component 使用；瀏覽器 window.setTimeout 回傳數字 id。
+  const autoCloseTimerRef = useRef<number | null>(null);
+
+  function clearAutoCloseTimer() {
+    if (autoCloseTimerRef.current !== null) {
+      window.clearTimeout(autoCloseTimerRef.current);
+      autoCloseTimerRef.current = null;
+    }
+  }
+
+  useEffect(() => () => clearAutoCloseTimer(), []);
 
   useEffect(() => {
     if (!isOpen) {
@@ -53,8 +64,18 @@ export function ContactModal({ className, label = "聯絡我們" }: ContactModal
 
   function closeModal() {
     if (status !== "submitting") {
+      clearAutoCloseTimer();
       setIsOpen(false);
+      setStatus("idle");
+      setStatusMessage("");
     }
+  }
+
+  function openModal() {
+    clearAutoCloseTimer();
+    setStatus("idle");
+    setStatusMessage("");
+    setIsOpen(true);
   }
 
   async function submitContact(event: FormEvent<HTMLFormElement>) {
@@ -89,6 +110,14 @@ export function ContactModal({ className, label = "聯絡我們" }: ContactModal
       setHoneypot("");
       setStatus("success");
       setStatusMessage("已收到您的留言，我們會盡快回覆。");
+      // 讓成功訊息停留一下，使用者確認送出成功後再自動關閉 Modal。
+      clearAutoCloseTimer();
+      autoCloseTimerRef.current = window.setTimeout(() => {
+        autoCloseTimerRef.current = null;
+        setIsOpen(false);
+        setStatus("idle");
+        setStatusMessage("");
+      }, 1600);
     } catch (error) {
       setStatus("error");
       setStatusMessage(error instanceof Error ? error.message : "送出失敗，請稍後再試。");
@@ -97,7 +126,7 @@ export function ContactModal({ className, label = "聯絡我們" }: ContactModal
 
   return (
     <>
-      <button type="button" className={className} onClick={() => setIsOpen(true)}>
+      <button type="button" className={className} onClick={openModal}>
         {label}
       </button>
 
