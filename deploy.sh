@@ -16,6 +16,8 @@ set -Eeuo pipefail
 #   BRANCH=master
 #   PORT=3001
 #   HEALTH_URL=http://127.0.0.1:3001/api/health
+#   HEALTH_RETRY_COUNT=15
+#   HEALTH_RETRY_DELAY=2
 
 APP_DIR="${APP_DIR:-/var/www/meter-intro-api}"
 APP_NAME="${APP_NAME:-meter-intro-api}"
@@ -23,6 +25,10 @@ BRANCH="${BRANCH:-master}"
 PORT="${PORT:-3001}"
 HEALTH_URL="${HEALTH_URL:-http://127.0.0.1:${PORT}/api/health}"
 ENV_FILE="${ENV_FILE:-${APP_DIR}/.env.production.local}"
+# PM2 重啟後 Next.js 需要短暫時間載入 production server；重試可避免服務正常
+# 啟動時，腳本卻因第一次 health check 太早執行而誤判部署失敗。
+HEALTH_RETRY_COUNT="${HEALTH_RETRY_COUNT:-15}"
+HEALTH_RETRY_DELAY="${HEALTH_RETRY_DELAY:-2}"
 
 log() {
   printf '\n[%s] %s\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$*"
@@ -82,7 +88,23 @@ fi
 log "保存 PM2 process list"
 pm2 save
 
-log "執行 health check：$HEALTH_URL"
-curl -fsS "$HEALTH_URL"
+log "等待後台啟動並執行 health check：$HEALTH_URL"
+attempt=1
+while [ "$attempt" -le "$HEALTH_RETRY_COUNT" ]; do
+  if curl -fsS "$HEALTH_URL"; then
+    printf '\n'
+    log "health check 成功（第 ${attempt} 次）"
+    break
+  fi
+
+  if [ "$attempt" -eq "$HEALTH_RETRY_COUNT" ]; then
+    echo "health check 在 ${HEALTH_RETRY_COUNT} 次嘗試後仍失敗：$HEALTH_URL" >&2
+    exit 1
+  fi
+
+  log "後台尚在啟動，${HEALTH_RETRY_DELAY} 秒後重試（${attempt}/${HEALTH_RETRY_COUNT}）"
+  sleep "$HEALTH_RETRY_DELAY"
+  attempt=$((attempt + 1))
+done
 
 log "部署完成"
