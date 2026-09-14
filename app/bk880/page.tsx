@@ -28,6 +28,7 @@ export default function BK880Page() {
         <nav className="flex items-center gap-4 text-xs font-bold text-slate-500">
           <PageViewTracker path="/bk880" label="BK880瀏覽" className="hidden sm:block" />
           <Link className="transition hover:text-indigo-600" href="/">首頁</Link>
+          <Link className="transition hover:text-indigo-600" href="/downloads/bk880">免費下載</Link>
           <a className="rounded-xl bg-slate-900 px-4 py-2.5 text-white shadow-lg shadow-slate-300 transition hover:bg-indigo-600" href="https://meter.daoshan50.com/bk880">正式頁面</a>
         </nav>
       </header>

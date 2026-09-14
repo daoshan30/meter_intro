@@ -67,6 +67,12 @@ export default function Home() {
             >
               產品總覽
             </a>
+            <Link
+              className="whitespace-nowrap rounded-2xl border border-white/75 bg-white/70 px-3 py-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-indigo-600"
+              href="/downloads/bk880"
+            >
+              免費下載
+            </Link>
             <a
               className="whitespace-nowrap rounded-2xl border border-white/75 bg-white/70 px-3 py-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-indigo-600"
               href="#capability"
@@ -95,6 +101,7 @@ export default function Home() {
           <nav className="hidden items-center gap-7 text-xs font-bold text-slate-500 md:flex">
             <a className="transition hover:text-indigo-600" href="#products">產品</a>
             <Link className="transition hover:text-indigo-600" href="/bk880">BK880 WebSerial</Link>
+            <Link className="transition hover:text-indigo-600" href="/downloads/bk880">免費下載</Link>
             <a className="transition hover:text-indigo-600" href="#capability">特色</a>
             <a className="rounded-xl bg-slate-900 px-4 py-2.5 text-white shadow-lg shadow-slate-300 transition hover:bg-indigo-600" href="#contact">聯絡我們</a>
           </nav>
@@ -115,6 +122,7 @@ export default function Home() {
           </p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a className="rounded-xl bg-slate-900 px-6 py-3 text-sm font-bold text-white shadow-xl shadow-slate-300 transition hover:-translate-y-0.5 hover:bg-indigo-600" href="#products">探索產品</a>
+            <Link className="rounded-xl border border-indigo-100 bg-white/75 px-6 py-3 text-sm font-bold text-indigo-600 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white" href="/downloads/bk880">下載 BK880 工具</Link>
             <a className="rounded-xl border border-white/90 bg-white/60 px-6 py-3 text-sm font-bold text-slate-700 shadow-sm backdrop-blur transition hover:-translate-y-0.5 hover:bg-white" href="#capability">了解特色</a>
           </div>
         </div>
