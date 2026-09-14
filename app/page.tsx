@@ -1,6 +1,6 @@
 ﻿import Link from "next/link";
 import { PageViewTracker } from "@/components/analytics/PageViewTracker";
-
+import { ContactModal } from "@/components/contact/ContactModal";
 const products = [
   {
     code: "01",
@@ -79,12 +79,7 @@ export default function Home() {
             >
               功能特色
             </a>
-            <a
-              className="whitespace-nowrap rounded-2xl border border-white/75 bg-white/70 px-3 py-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-indigo-600"
-              href="#contact"
-            >
-              聯絡我們
-            </a>
+            <ContactModal className="whitespace-nowrap rounded-2xl border border-white/75 bg-white/70 px-3 py-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-indigo-600" />
           </nav>
         </div>
       </aside>
@@ -103,7 +98,7 @@ export default function Home() {
             <Link className="transition hover:text-indigo-600" href="/bk880">BK880 WebSerial</Link>
             <Link className="transition hover:text-indigo-600" href="/downloads/bk880">免費下載</Link>
             <a className="transition hover:text-indigo-600" href="#capability">特色</a>
-            <a className="rounded-xl bg-slate-900 px-4 py-2.5 text-white shadow-lg shadow-slate-300 transition hover:bg-indigo-600" href="#contact">聯絡我們</a>
+            <ContactModal className="rounded-xl bg-slate-900 px-4 py-2.5 text-white shadow-lg shadow-slate-300 transition hover:bg-indigo-600" />
           </nav>
         </div>
       </header>
@@ -200,7 +195,7 @@ export default function Home() {
           <p className="mt-1 text-xs text-slate-400">Precision instruments, thoughtfully made.</p>
           <PageViewTracker path="/" label="首頁瀏覽" className="mt-3" />
         </div>
-        <a className="w-fit rounded-xl border border-white bg-white/65 px-5 py-3 text-sm font-bold text-indigo-600 shadow-sm backdrop-blur transition hover:bg-white" href="mailto:contact@meter-intro.example">CONTACT@METER-INTRO.EXAMPLE</a>
+        <ContactModal className="w-fit rounded-xl border border-white bg-white/65 px-5 py-3 text-sm font-bold text-indigo-600 shadow-sm backdrop-blur transition hover:bg-white" label="聯絡我們" />
       </footer>
     </main>
   );

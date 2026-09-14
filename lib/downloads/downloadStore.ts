@@ -52,6 +52,21 @@ export interface CreateDownloadRequestResult {
   createdAt: string;
 }
 
+export interface CreateContactLeadInput {
+  name?: string;
+  email: string;
+  message: string;
+  sourcePath?: string;
+  userAgent?: string | null;
+  ipAddress?: string | null;
+}
+
+export interface CreateContactLeadResult {
+  leadId: number;
+  received: true;
+  receivedAt: string;
+}
+
 let databasePromise: Promise<InstanceType<SqliteModule["DatabaseSync"]>> | undefined;
 
 export function isSupportedDownloadProduct(productKey: string): boolean {
@@ -123,6 +138,47 @@ export async function createDownloadRequest(
   };
 }
 
+/**
+ * 將首頁聯絡表單寫入與下載紀錄共用的 SQLite 資料庫。
+ * 路由層已驗證欄位格式；這裡仍統一修剪字串與限制 user agent 長度，
+ * 避免瀏覽器標頭意外占用過多資料庫空間。
+ */
+export async function createContactLead(
+  input: CreateContactLeadInput,
+): Promise<CreateContactLeadResult> {
+  const db = await getDatabase();
+  const now = new Date().toISOString();
+  const result = db
+    .prepare(
+      `INSERT INTO leads (
+        type,
+        name,
+        email,
+        message,
+        source_path,
+        ip_hash,
+        user_agent,
+        created_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    )
+    .run(
+      "contact",
+      input.name?.trim() || null,
+      input.email.trim().toLowerCase(),
+      input.message.trim(),
+      input.sourcePath ?? "/",
+      hashIp(input.ipAddress),
+      input.userAgent?.slice(0, 500) ?? null,
+      now,
+    );
+
+  return {
+    leadId: Number(result.lastInsertRowid),
+    received: true,
+    receivedAt: now,
+  };
+}
+
 function normalizeReleaseKey(releaseKey?: string): string {
   return !releaseKey || releaseKey === "latest" ? RELEASE_KEY : releaseKey;
 }
@@ -179,6 +235,18 @@ function initializeSchema(db: InstanceType<SqliteModule["DatabaseSync"]>): void 
       created_at TEXT NOT NULL,
       FOREIGN KEY (product_id) REFERENCES products(id),
       FOREIGN KEY (release_id) REFERENCES releases(id)
+    );
+
+    CREATE TABLE IF NOT EXISTS leads (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL,
+      name TEXT,
+      email TEXT NOT NULL,
+      message TEXT,
+      source_path TEXT,
+      ip_hash TEXT,
+      user_agent TEXT,
+      created_at TEXT NOT NULL
     );
   `);
 }
